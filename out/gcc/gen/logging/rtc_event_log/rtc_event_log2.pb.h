@@ -46,7 +46,7 @@ struct TableStruct_rtc_5fevent_5flog2_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[30]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[31]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -99,6 +99,9 @@ extern EventDefaultTypeInternal _Event_default_instance_;
 class EventStream;
 class EventStreamDefaultTypeInternal;
 extern EventStreamDefaultTypeInternal _EventStream_default_instance_;
+class FrameDecodedEvents;
+class FrameDecodedEventsDefaultTypeInternal;
+extern FrameDecodedEventsDefaultTypeInternal _FrameDecodedEvents_default_instance_;
 class GenericAckReceived;
 class GenericAckReceivedDefaultTypeInternal;
 extern GenericAckReceivedDefaultTypeInternal _GenericAckReceived_default_instance_;
@@ -162,6 +165,7 @@ template<> ::webrtc::rtclog2::DtlsWritableState* Arena::CreateMaybeMessage<::web
 template<> ::webrtc::rtclog2::EndLogEvent* Arena::CreateMaybeMessage<::webrtc::rtclog2::EndLogEvent>(Arena*);
 template<> ::webrtc::rtclog2::Event* Arena::CreateMaybeMessage<::webrtc::rtclog2::Event>(Arena*);
 template<> ::webrtc::rtclog2::EventStream* Arena::CreateMaybeMessage<::webrtc::rtclog2::EventStream>(Arena*);
+template<> ::webrtc::rtclog2::FrameDecodedEvents* Arena::CreateMaybeMessage<::webrtc::rtclog2::FrameDecodedEvents>(Arena*);
 template<> ::webrtc::rtclog2::GenericAckReceived* Arena::CreateMaybeMessage<::webrtc::rtclog2::GenericAckReceived>(Arena*);
 template<> ::webrtc::rtclog2::GenericPacketReceived* Arena::CreateMaybeMessage<::webrtc::rtclog2::GenericPacketReceived>(Arena*);
 template<> ::webrtc::rtclog2::GenericPacketSent* Arena::CreateMaybeMessage<::webrtc::rtclog2::GenericPacketSent>(Arena*);
@@ -181,6 +185,29 @@ PROTOBUF_NAMESPACE_CLOSE
 namespace webrtc {
 namespace rtclog2 {
 
+enum FrameDecodedEvents_Codec : int {
+  FrameDecodedEvents_Codec_CODEC_UNKNOWN = 0,
+  FrameDecodedEvents_Codec_CODEC_GENERIC = 1,
+  FrameDecodedEvents_Codec_CODEC_VP8 = 2,
+  FrameDecodedEvents_Codec_CODEC_VP9 = 3,
+  FrameDecodedEvents_Codec_CODEC_AV1 = 4,
+  FrameDecodedEvents_Codec_CODEC_H264 = 5
+};
+bool FrameDecodedEvents_Codec_IsValid(int value);
+constexpr FrameDecodedEvents_Codec FrameDecodedEvents_Codec_Codec_MIN = FrameDecodedEvents_Codec_CODEC_UNKNOWN;
+constexpr FrameDecodedEvents_Codec FrameDecodedEvents_Codec_Codec_MAX = FrameDecodedEvents_Codec_CODEC_H264;
+constexpr int FrameDecodedEvents_Codec_Codec_ARRAYSIZE = FrameDecodedEvents_Codec_Codec_MAX + 1;
+
+const std::string& FrameDecodedEvents_Codec_Name(FrameDecodedEvents_Codec value);
+template<typename T>
+inline const std::string& FrameDecodedEvents_Codec_Name(T enum_t_value) {
+  static_assert(::std::is_same<T, FrameDecodedEvents_Codec>::value ||
+    ::std::is_integral<T>::value,
+    "Incorrect type passed to function FrameDecodedEvents_Codec_Name.");
+  return FrameDecodedEvents_Codec_Name(static_cast<FrameDecodedEvents_Codec>(enum_t_value));
+}
+bool FrameDecodedEvents_Codec_Parse(
+    const std::string& name, FrameDecodedEvents_Codec* value);
 enum DelayBasedBweUpdates_DetectorState : int {
   DelayBasedBweUpdates_DetectorState_BWE_UNKNOWN_STATE = 0,
   DelayBasedBweUpdates_DetectorState_BWE_NORMAL = 1,
@@ -488,6 +515,7 @@ class EventStream :
     kIncomingRtcpPacketsFieldNumber = 4,
     kOutgoingRtcpPacketsFieldNumber = 5,
     kAudioPlayoutEventsFieldNumber = 6,
+    kFrameDecodedEventsFieldNumber = 7,
     kBeginLogEventsFieldNumber = 16,
     kEndLogEventsFieldNumber = 17,
     kLossBasedBweUpdatesFieldNumber = 18,
@@ -576,6 +604,17 @@ class EventStream :
   ::webrtc::rtclog2::AudioPlayoutEvents* add_audio_playout_events();
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::AudioPlayoutEvents >&
       audio_playout_events() const;
+
+  // repeated .webrtc.rtclog2.FrameDecodedEvents frame_decoded_events = 7;
+  int frame_decoded_events_size() const;
+  void clear_frame_decoded_events();
+  ::webrtc::rtclog2::FrameDecodedEvents* mutable_frame_decoded_events(int index);
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::FrameDecodedEvents >*
+      mutable_frame_decoded_events();
+  const ::webrtc::rtclog2::FrameDecodedEvents& frame_decoded_events(int index) const;
+  ::webrtc::rtclog2::FrameDecodedEvents* add_frame_decoded_events();
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::FrameDecodedEvents >&
+      frame_decoded_events() const;
 
   // repeated .webrtc.rtclog2.BeginLogEvent begin_log_events = 16;
   int begin_log_events_size() const;
@@ -832,6 +871,7 @@ class EventStream :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::IncomingRtcpPackets > incoming_rtcp_packets_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::OutgoingRtcpPackets > outgoing_rtcp_packets_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::AudioPlayoutEvents > audio_playout_events_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::FrameDecodedEvents > frame_decoded_events_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::BeginLogEvent > begin_log_events_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::EndLogEvent > end_log_events_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::LossBasedBweUpdates > loss_based_bwe_updates_;
@@ -3023,6 +3063,317 @@ class AudioPlayoutEvents :
 };
 // -------------------------------------------------------------------
 
+class FrameDecodedEvents :
+    public ::PROTOBUF_NAMESPACE_ID::MessageLite /* @@protoc_insertion_point(class_definition:webrtc.rtclog2.FrameDecodedEvents) */ {
+ public:
+  FrameDecodedEvents();
+  virtual ~FrameDecodedEvents();
+
+  FrameDecodedEvents(const FrameDecodedEvents& from);
+  FrameDecodedEvents(FrameDecodedEvents&& from) noexcept
+    : FrameDecodedEvents() {
+    *this = ::std::move(from);
+  }
+
+  inline FrameDecodedEvents& operator=(const FrameDecodedEvents& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline FrameDecodedEvents& operator=(FrameDecodedEvents&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const std::string& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline std::string* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const FrameDecodedEvents& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const FrameDecodedEvents* internal_default_instance() {
+    return reinterpret_cast<const FrameDecodedEvents*>(
+               &_FrameDecodedEvents_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    10;
+
+  friend void swap(FrameDecodedEvents& a, FrameDecodedEvents& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(FrameDecodedEvents* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline FrameDecodedEvents* New() const final {
+    return CreateMaybeMessage<FrameDecodedEvents>(nullptr);
+  }
+
+  FrameDecodedEvents* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<FrameDecodedEvents>(arena);
+  }
+  void CheckTypeAndMergeFrom(const ::PROTOBUF_NAMESPACE_ID::MessageLite& from)
+    final;
+  void CopyFrom(const FrameDecodedEvents& from);
+  void MergeFrom(const FrameDecodedEvents& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  void DiscardUnknownFields();
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FrameDecodedEvents* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "webrtc.rtclog2.FrameDecodedEvents";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  std::string GetTypeName() const final;
+
+  // nested types ----------------------------------------------------
+
+  typedef FrameDecodedEvents_Codec Codec;
+  static constexpr Codec CODEC_UNKNOWN =
+    FrameDecodedEvents_Codec_CODEC_UNKNOWN;
+  static constexpr Codec CODEC_GENERIC =
+    FrameDecodedEvents_Codec_CODEC_GENERIC;
+  static constexpr Codec CODEC_VP8 =
+    FrameDecodedEvents_Codec_CODEC_VP8;
+  static constexpr Codec CODEC_VP9 =
+    FrameDecodedEvents_Codec_CODEC_VP9;
+  static constexpr Codec CODEC_AV1 =
+    FrameDecodedEvents_Codec_CODEC_AV1;
+  static constexpr Codec CODEC_H264 =
+    FrameDecodedEvents_Codec_CODEC_H264;
+  static inline bool Codec_IsValid(int value) {
+    return FrameDecodedEvents_Codec_IsValid(value);
+  }
+  static constexpr Codec Codec_MIN =
+    FrameDecodedEvents_Codec_Codec_MIN;
+  static constexpr Codec Codec_MAX =
+    FrameDecodedEvents_Codec_Codec_MAX;
+  static constexpr int Codec_ARRAYSIZE =
+    FrameDecodedEvents_Codec_Codec_ARRAYSIZE;
+  template<typename T>
+  static inline const std::string& Codec_Name(T enum_t_value) {
+    static_assert(::std::is_same<T, Codec>::value ||
+      ::std::is_integral<T>::value,
+      "Incorrect type passed to function Codec_Name.");
+    return FrameDecodedEvents_Codec_Name(enum_t_value);
+  }
+  static inline bool Codec_Parse(const std::string& name,
+      Codec* value) {
+    return FrameDecodedEvents_Codec_Parse(name, value);
+  }
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kTimestampMsDeltasFieldNumber = 101,
+    kSsrcDeltasFieldNumber = 102,
+    kRenderTimeMsDeltasFieldNumber = 103,
+    kWidthDeltasFieldNumber = 104,
+    kHeightDeltasFieldNumber = 105,
+    kCodecDeltasFieldNumber = 106,
+    kQpDeltasFieldNumber = 107,
+    kTimestampMsFieldNumber = 1,
+    kRenderTimeMsFieldNumber = 3,
+    kSsrcFieldNumber = 2,
+    kWidthFieldNumber = 4,
+    kHeightFieldNumber = 5,
+    kCodecFieldNumber = 6,
+    kQpFieldNumber = 7,
+    kNumberOfDeltasFieldNumber = 15,
+  };
+  // optional bytes timestamp_ms_deltas = 101;
+  bool has_timestamp_ms_deltas() const;
+  void clear_timestamp_ms_deltas();
+  const std::string& timestamp_ms_deltas() const;
+  void set_timestamp_ms_deltas(const std::string& value);
+  void set_timestamp_ms_deltas(std::string&& value);
+  void set_timestamp_ms_deltas(const char* value);
+  void set_timestamp_ms_deltas(const void* value, size_t size);
+  std::string* mutable_timestamp_ms_deltas();
+  std::string* release_timestamp_ms_deltas();
+  void set_allocated_timestamp_ms_deltas(std::string* timestamp_ms_deltas);
+
+  // optional bytes ssrc_deltas = 102;
+  bool has_ssrc_deltas() const;
+  void clear_ssrc_deltas();
+  const std::string& ssrc_deltas() const;
+  void set_ssrc_deltas(const std::string& value);
+  void set_ssrc_deltas(std::string&& value);
+  void set_ssrc_deltas(const char* value);
+  void set_ssrc_deltas(const void* value, size_t size);
+  std::string* mutable_ssrc_deltas();
+  std::string* release_ssrc_deltas();
+  void set_allocated_ssrc_deltas(std::string* ssrc_deltas);
+
+  // optional bytes render_time_ms_deltas = 103;
+  bool has_render_time_ms_deltas() const;
+  void clear_render_time_ms_deltas();
+  const std::string& render_time_ms_deltas() const;
+  void set_render_time_ms_deltas(const std::string& value);
+  void set_render_time_ms_deltas(std::string&& value);
+  void set_render_time_ms_deltas(const char* value);
+  void set_render_time_ms_deltas(const void* value, size_t size);
+  std::string* mutable_render_time_ms_deltas();
+  std::string* release_render_time_ms_deltas();
+  void set_allocated_render_time_ms_deltas(std::string* render_time_ms_deltas);
+
+  // optional bytes width_deltas = 104;
+  bool has_width_deltas() const;
+  void clear_width_deltas();
+  const std::string& width_deltas() const;
+  void set_width_deltas(const std::string& value);
+  void set_width_deltas(std::string&& value);
+  void set_width_deltas(const char* value);
+  void set_width_deltas(const void* value, size_t size);
+  std::string* mutable_width_deltas();
+  std::string* release_width_deltas();
+  void set_allocated_width_deltas(std::string* width_deltas);
+
+  // optional bytes height_deltas = 105;
+  bool has_height_deltas() const;
+  void clear_height_deltas();
+  const std::string& height_deltas() const;
+  void set_height_deltas(const std::string& value);
+  void set_height_deltas(std::string&& value);
+  void set_height_deltas(const char* value);
+  void set_height_deltas(const void* value, size_t size);
+  std::string* mutable_height_deltas();
+  std::string* release_height_deltas();
+  void set_allocated_height_deltas(std::string* height_deltas);
+
+  // optional bytes codec_deltas = 106;
+  bool has_codec_deltas() const;
+  void clear_codec_deltas();
+  const std::string& codec_deltas() const;
+  void set_codec_deltas(const std::string& value);
+  void set_codec_deltas(std::string&& value);
+  void set_codec_deltas(const char* value);
+  void set_codec_deltas(const void* value, size_t size);
+  std::string* mutable_codec_deltas();
+  std::string* release_codec_deltas();
+  void set_allocated_codec_deltas(std::string* codec_deltas);
+
+  // optional bytes qp_deltas = 107;
+  bool has_qp_deltas() const;
+  void clear_qp_deltas();
+  const std::string& qp_deltas() const;
+  void set_qp_deltas(const std::string& value);
+  void set_qp_deltas(std::string&& value);
+  void set_qp_deltas(const char* value);
+  void set_qp_deltas(const void* value, size_t size);
+  std::string* mutable_qp_deltas();
+  std::string* release_qp_deltas();
+  void set_allocated_qp_deltas(std::string* qp_deltas);
+
+  // optional int64 timestamp_ms = 1;
+  bool has_timestamp_ms() const;
+  void clear_timestamp_ms();
+  ::PROTOBUF_NAMESPACE_ID::int64 timestamp_ms() const;
+  void set_timestamp_ms(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // optional int64 render_time_ms = 3;
+  bool has_render_time_ms() const;
+  void clear_render_time_ms();
+  ::PROTOBUF_NAMESPACE_ID::int64 render_time_ms() const;
+  void set_render_time_ms(::PROTOBUF_NAMESPACE_ID::int64 value);
+
+  // optional fixed32 ssrc = 2;
+  bool has_ssrc() const;
+  void clear_ssrc();
+  ::PROTOBUF_NAMESPACE_ID::uint32 ssrc() const;
+  void set_ssrc(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional int32 width = 4;
+  bool has_width() const;
+  void clear_width();
+  ::PROTOBUF_NAMESPACE_ID::int32 width() const;
+  void set_width(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // optional int32 height = 5;
+  bool has_height() const;
+  void clear_height();
+  ::PROTOBUF_NAMESPACE_ID::int32 height() const;
+  void set_height(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // optional .webrtc.rtclog2.FrameDecodedEvents.Codec codec = 6;
+  bool has_codec() const;
+  void clear_codec();
+  ::webrtc::rtclog2::FrameDecodedEvents_Codec codec() const;
+  void set_codec(::webrtc::rtclog2::FrameDecodedEvents_Codec value);
+
+  // optional uint32 qp = 7;
+  bool has_qp() const;
+  void clear_qp();
+  ::PROTOBUF_NAMESPACE_ID::uint32 qp() const;
+  void set_qp(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // optional uint32 number_of_deltas = 15;
+  bool has_number_of_deltas() const;
+  void clear_number_of_deltas();
+  ::PROTOBUF_NAMESPACE_ID::uint32 number_of_deltas() const;
+  void set_number_of_deltas(::PROTOBUF_NAMESPACE_ID::uint32 value);
+
+  // @@protoc_insertion_point(class_scope:webrtc.rtclog2.FrameDecodedEvents)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr timestamp_ms_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr ssrc_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr render_time_ms_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr width_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr height_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr codec_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr qp_deltas_;
+  ::PROTOBUF_NAMESPACE_ID::int64 timestamp_ms_;
+  ::PROTOBUF_NAMESPACE_ID::int64 render_time_ms_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 ssrc_;
+  ::PROTOBUF_NAMESPACE_ID::int32 width_;
+  ::PROTOBUF_NAMESPACE_ID::int32 height_;
+  int codec_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 qp_;
+  ::PROTOBUF_NAMESPACE_ID::uint32 number_of_deltas_;
+  friend struct ::TableStruct_rtc_5fevent_5flog2_2eproto;
+};
+// -------------------------------------------------------------------
+
 class BeginLogEvent :
     public ::PROTOBUF_NAMESPACE_ID::MessageLite /* @@protoc_insertion_point(class_definition:webrtc.rtclog2.BeginLogEvent) */ {
  public:
@@ -3063,7 +3414,7 @@ class BeginLogEvent :
                &_BeginLogEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(BeginLogEvent& a, BeginLogEvent& b) {
     a.Swap(&b);
@@ -3202,7 +3553,7 @@ class EndLogEvent :
                &_EndLogEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    11;
+    12;
 
   friend void swap(EndLogEvent& a, EndLogEvent& b) {
     a.Swap(&b);
@@ -3325,7 +3676,7 @@ class LossBasedBweUpdates :
                &_LossBasedBweUpdates_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    12;
+    13;
 
   friend void swap(LossBasedBweUpdates& a, LossBasedBweUpdates& b) {
     a.Swap(&b);
@@ -3536,7 +3887,7 @@ class DelayBasedBweUpdates :
                &_DelayBasedBweUpdates_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    13;
+    14;
 
   friend void swap(DelayBasedBweUpdates& a, DelayBasedBweUpdates& b) {
     a.Swap(&b);
@@ -3755,7 +4106,7 @@ class RtpHeaderExtensionConfig :
                &_RtpHeaderExtensionConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    14;
+    15;
 
   friend void swap(RtpHeaderExtensionConfig& a, RtpHeaderExtensionConfig& b) {
     a.Swap(&b);
@@ -3910,7 +4261,7 @@ class VideoRecvStreamConfig :
                &_VideoRecvStreamConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    15;
+    16;
 
   friend void swap(VideoRecvStreamConfig& a, VideoRecvStreamConfig& b) {
     a.Swap(&b);
@@ -4067,7 +4418,7 @@ class VideoSendStreamConfig :
                &_VideoSendStreamConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    16;
+    17;
 
   friend void swap(VideoSendStreamConfig& a, VideoSendStreamConfig& b) {
     a.Swap(&b);
@@ -4216,7 +4567,7 @@ class AudioRecvStreamConfig :
                &_AudioRecvStreamConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    17;
+    18;
 
   friend void swap(AudioRecvStreamConfig& a, AudioRecvStreamConfig& b) {
     a.Swap(&b);
@@ -4365,7 +4716,7 @@ class AudioSendStreamConfig :
                &_AudioSendStreamConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    18;
+    19;
 
   friend void swap(AudioSendStreamConfig& a, AudioSendStreamConfig& b) {
     a.Swap(&b);
@@ -4506,7 +4857,7 @@ class AudioNetworkAdaptations :
                &_AudioNetworkAdaptations_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    19;
+    20;
 
   friend void swap(AudioNetworkAdaptations& a, AudioNetworkAdaptations& b) {
     a.Swap(&b);
@@ -4783,7 +5134,7 @@ class BweProbeCluster :
                &_BweProbeCluster_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    20;
+    21;
 
   friend void swap(BweProbeCluster& a, BweProbeCluster& b) {
     a.Swap(&b);
@@ -4938,7 +5289,7 @@ class BweProbeResultSuccess :
                &_BweProbeResultSuccess_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    21;
+    22;
 
   friend void swap(BweProbeResultSuccess& a, BweProbeResultSuccess& b) {
     a.Swap(&b);
@@ -5077,7 +5428,7 @@ class BweProbeResultFailure :
                &_BweProbeResultFailure_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    22;
+    23;
 
   friend void swap(BweProbeResultFailure& a, BweProbeResultFailure& b) {
     a.Swap(&b);
@@ -5246,7 +5597,7 @@ class AlrState :
                &_AlrState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    23;
+    24;
 
   friend void swap(AlrState& a, AlrState& b) {
     a.Swap(&b);
@@ -5377,7 +5728,7 @@ class IceCandidatePairConfig :
                &_IceCandidatePairConfig_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    24;
+    25;
 
   friend void swap(IceCandidatePairConfig& a, IceCandidatePairConfig& b) {
     a.Swap(&b);
@@ -5730,7 +6081,7 @@ class IceCandidatePairEvent :
                &_IceCandidatePairEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    25;
+    26;
 
   friend void swap(IceCandidatePairEvent& a, IceCandidatePairEvent& b) {
     a.Swap(&b);
@@ -5909,7 +6260,7 @@ class DtlsTransportStateEvent :
                &_DtlsTransportStateEvent_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    26;
+    27;
 
   friend void swap(DtlsTransportStateEvent& a, DtlsTransportStateEvent& b) {
     a.Swap(&b);
@@ -6074,7 +6425,7 @@ class DtlsWritableState :
                &_DtlsWritableState_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    27;
+    28;
 
   friend void swap(DtlsWritableState& a, DtlsWritableState& b) {
     a.Swap(&b);
@@ -6205,7 +6556,7 @@ class RouteChange :
                &_RouteChange_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    28;
+    29;
 
   friend void swap(RouteChange& a, RouteChange& b) {
     a.Swap(&b);
@@ -6344,7 +6695,7 @@ class RemoteEstimates :
                &_RemoteEstimates_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    29;
+    30;
 
   friend void swap(RemoteEstimates& a, RemoteEstimates& b) {
     a.Swap(&b);
@@ -6680,6 +7031,36 @@ inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::Audio
 EventStream::audio_playout_events() const {
   // @@protoc_insertion_point(field_list:webrtc.rtclog2.EventStream.audio_playout_events)
   return audio_playout_events_;
+}
+
+// repeated .webrtc.rtclog2.FrameDecodedEvents frame_decoded_events = 7;
+inline int EventStream::frame_decoded_events_size() const {
+  return frame_decoded_events_.size();
+}
+inline void EventStream::clear_frame_decoded_events() {
+  frame_decoded_events_.Clear();
+}
+inline ::webrtc::rtclog2::FrameDecodedEvents* EventStream::mutable_frame_decoded_events(int index) {
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.EventStream.frame_decoded_events)
+  return frame_decoded_events_.Mutable(index);
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::FrameDecodedEvents >*
+EventStream::mutable_frame_decoded_events() {
+  // @@protoc_insertion_point(field_mutable_list:webrtc.rtclog2.EventStream.frame_decoded_events)
+  return &frame_decoded_events_;
+}
+inline const ::webrtc::rtclog2::FrameDecodedEvents& EventStream::frame_decoded_events(int index) const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.EventStream.frame_decoded_events)
+  return frame_decoded_events_.Get(index);
+}
+inline ::webrtc::rtclog2::FrameDecodedEvents* EventStream::add_frame_decoded_events() {
+  // @@protoc_insertion_point(field_add:webrtc.rtclog2.EventStream.frame_decoded_events)
+  return frame_decoded_events_.Add();
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::webrtc::rtclog2::FrameDecodedEvents >&
+EventStream::frame_decoded_events() const {
+  // @@protoc_insertion_point(field_list:webrtc.rtclog2.EventStream.frame_decoded_events)
+  return frame_decoded_events_;
 }
 
 // repeated .webrtc.rtclog2.BeginLogEvent begin_log_events = 16;
@@ -11252,6 +11633,561 @@ inline void AudioPlayoutEvents::set_allocated_local_ssrc_deltas(std::string* loc
 
 // -------------------------------------------------------------------
 
+// FrameDecodedEvents
+
+// optional int64 timestamp_ms = 1;
+inline bool FrameDecodedEvents::has_timestamp_ms() const {
+  return (_has_bits_[0] & 0x00000080u) != 0;
+}
+inline void FrameDecodedEvents::clear_timestamp_ms() {
+  timestamp_ms_ = PROTOBUF_LONGLONG(0);
+  _has_bits_[0] &= ~0x00000080u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 FrameDecodedEvents::timestamp_ms() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms)
+  return timestamp_ms_;
+}
+inline void FrameDecodedEvents::set_timestamp_ms(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _has_bits_[0] |= 0x00000080u;
+  timestamp_ms_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms)
+}
+
+// optional fixed32 ssrc = 2;
+inline bool FrameDecodedEvents::has_ssrc() const {
+  return (_has_bits_[0] & 0x00000200u) != 0;
+}
+inline void FrameDecodedEvents::clear_ssrc() {
+  ssrc_ = 0u;
+  _has_bits_[0] &= ~0x00000200u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 FrameDecodedEvents::ssrc() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.ssrc)
+  return ssrc_;
+}
+inline void FrameDecodedEvents::set_ssrc(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00000200u;
+  ssrc_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.ssrc)
+}
+
+// optional int64 render_time_ms = 3;
+inline bool FrameDecodedEvents::has_render_time_ms() const {
+  return (_has_bits_[0] & 0x00000100u) != 0;
+}
+inline void FrameDecodedEvents::clear_render_time_ms() {
+  render_time_ms_ = PROTOBUF_LONGLONG(0);
+  _has_bits_[0] &= ~0x00000100u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int64 FrameDecodedEvents::render_time_ms() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.render_time_ms)
+  return render_time_ms_;
+}
+inline void FrameDecodedEvents::set_render_time_ms(::PROTOBUF_NAMESPACE_ID::int64 value) {
+  _has_bits_[0] |= 0x00000100u;
+  render_time_ms_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.render_time_ms)
+}
+
+// optional int32 width = 4;
+inline bool FrameDecodedEvents::has_width() const {
+  return (_has_bits_[0] & 0x00000400u) != 0;
+}
+inline void FrameDecodedEvents::clear_width() {
+  width_ = 0;
+  _has_bits_[0] &= ~0x00000400u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 FrameDecodedEvents::width() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.width)
+  return width_;
+}
+inline void FrameDecodedEvents::set_width(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000400u;
+  width_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.width)
+}
+
+// optional int32 height = 5;
+inline bool FrameDecodedEvents::has_height() const {
+  return (_has_bits_[0] & 0x00000800u) != 0;
+}
+inline void FrameDecodedEvents::clear_height() {
+  height_ = 0;
+  _has_bits_[0] &= ~0x00000800u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 FrameDecodedEvents::height() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.height)
+  return height_;
+}
+inline void FrameDecodedEvents::set_height(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000800u;
+  height_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.height)
+}
+
+// optional .webrtc.rtclog2.FrameDecodedEvents.Codec codec = 6;
+inline bool FrameDecodedEvents::has_codec() const {
+  return (_has_bits_[0] & 0x00001000u) != 0;
+}
+inline void FrameDecodedEvents::clear_codec() {
+  codec_ = 0;
+  _has_bits_[0] &= ~0x00001000u;
+}
+inline ::webrtc::rtclog2::FrameDecodedEvents_Codec FrameDecodedEvents::codec() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.codec)
+  return static_cast< ::webrtc::rtclog2::FrameDecodedEvents_Codec >(codec_);
+}
+inline void FrameDecodedEvents::set_codec(::webrtc::rtclog2::FrameDecodedEvents_Codec value) {
+  assert(::webrtc::rtclog2::FrameDecodedEvents_Codec_IsValid(value));
+  _has_bits_[0] |= 0x00001000u;
+  codec_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.codec)
+}
+
+// optional uint32 qp = 7;
+inline bool FrameDecodedEvents::has_qp() const {
+  return (_has_bits_[0] & 0x00002000u) != 0;
+}
+inline void FrameDecodedEvents::clear_qp() {
+  qp_ = 0u;
+  _has_bits_[0] &= ~0x00002000u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 FrameDecodedEvents::qp() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.qp)
+  return qp_;
+}
+inline void FrameDecodedEvents::set_qp(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00002000u;
+  qp_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.qp)
+}
+
+// optional uint32 number_of_deltas = 15;
+inline bool FrameDecodedEvents::has_number_of_deltas() const {
+  return (_has_bits_[0] & 0x00004000u) != 0;
+}
+inline void FrameDecodedEvents::clear_number_of_deltas() {
+  number_of_deltas_ = 0u;
+  _has_bits_[0] &= ~0x00004000u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::uint32 FrameDecodedEvents::number_of_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.number_of_deltas)
+  return number_of_deltas_;
+}
+inline void FrameDecodedEvents::set_number_of_deltas(::PROTOBUF_NAMESPACE_ID::uint32 value) {
+  _has_bits_[0] |= 0x00004000u;
+  number_of_deltas_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.number_of_deltas)
+}
+
+// optional bytes timestamp_ms_deltas = 101;
+inline bool FrameDecodedEvents::has_timestamp_ms_deltas() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FrameDecodedEvents::clear_timestamp_ms_deltas() {
+  timestamp_ms_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline const std::string& FrameDecodedEvents::timestamp_ms_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+  return timestamp_ms_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_timestamp_ms_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000001u;
+  timestamp_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+}
+inline void FrameDecodedEvents::set_timestamp_ms_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000001u;
+  timestamp_ms_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+}
+inline void FrameDecodedEvents::set_timestamp_ms_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000001u;
+  timestamp_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+}
+inline void FrameDecodedEvents::set_timestamp_ms_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000001u;
+  timestamp_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_timestamp_ms_deltas() {
+  _has_bits_[0] |= 0x00000001u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+  return timestamp_ms_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_timestamp_ms_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+  if (!has_timestamp_ms_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000001u;
+  return timestamp_ms_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_timestamp_ms_deltas(std::string* timestamp_ms_deltas) {
+  if (timestamp_ms_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000001u;
+  } else {
+    _has_bits_[0] &= ~0x00000001u;
+  }
+  timestamp_ms_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), timestamp_ms_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.timestamp_ms_deltas)
+}
+
+// optional bytes ssrc_deltas = 102;
+inline bool FrameDecodedEvents::has_ssrc_deltas() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FrameDecodedEvents::clear_ssrc_deltas() {
+  ssrc_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline const std::string& FrameDecodedEvents::ssrc_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+  return ssrc_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_ssrc_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000002u;
+  ssrc_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+}
+inline void FrameDecodedEvents::set_ssrc_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000002u;
+  ssrc_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+}
+inline void FrameDecodedEvents::set_ssrc_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000002u;
+  ssrc_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+}
+inline void FrameDecodedEvents::set_ssrc_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000002u;
+  ssrc_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_ssrc_deltas() {
+  _has_bits_[0] |= 0x00000002u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+  return ssrc_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_ssrc_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+  if (!has_ssrc_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000002u;
+  return ssrc_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_ssrc_deltas(std::string* ssrc_deltas) {
+  if (ssrc_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000002u;
+  } else {
+    _has_bits_[0] &= ~0x00000002u;
+  }
+  ssrc_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ssrc_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.ssrc_deltas)
+}
+
+// optional bytes render_time_ms_deltas = 103;
+inline bool FrameDecodedEvents::has_render_time_ms_deltas() const {
+  return (_has_bits_[0] & 0x00000004u) != 0;
+}
+inline void FrameDecodedEvents::clear_render_time_ms_deltas() {
+  render_time_ms_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000004u;
+}
+inline const std::string& FrameDecodedEvents::render_time_ms_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+  return render_time_ms_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_render_time_ms_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000004u;
+  render_time_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+}
+inline void FrameDecodedEvents::set_render_time_ms_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000004u;
+  render_time_ms_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+}
+inline void FrameDecodedEvents::set_render_time_ms_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000004u;
+  render_time_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+}
+inline void FrameDecodedEvents::set_render_time_ms_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000004u;
+  render_time_ms_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_render_time_ms_deltas() {
+  _has_bits_[0] |= 0x00000004u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+  return render_time_ms_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_render_time_ms_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+  if (!has_render_time_ms_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000004u;
+  return render_time_ms_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_render_time_ms_deltas(std::string* render_time_ms_deltas) {
+  if (render_time_ms_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000004u;
+  } else {
+    _has_bits_[0] &= ~0x00000004u;
+  }
+  render_time_ms_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), render_time_ms_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.render_time_ms_deltas)
+}
+
+// optional bytes width_deltas = 104;
+inline bool FrameDecodedEvents::has_width_deltas() const {
+  return (_has_bits_[0] & 0x00000008u) != 0;
+}
+inline void FrameDecodedEvents::clear_width_deltas() {
+  width_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000008u;
+}
+inline const std::string& FrameDecodedEvents::width_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+  return width_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_width_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000008u;
+  width_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+}
+inline void FrameDecodedEvents::set_width_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000008u;
+  width_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+}
+inline void FrameDecodedEvents::set_width_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000008u;
+  width_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+}
+inline void FrameDecodedEvents::set_width_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000008u;
+  width_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_width_deltas() {
+  _has_bits_[0] |= 0x00000008u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+  return width_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_width_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+  if (!has_width_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000008u;
+  return width_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_width_deltas(std::string* width_deltas) {
+  if (width_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000008u;
+  } else {
+    _has_bits_[0] &= ~0x00000008u;
+  }
+  width_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), width_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.width_deltas)
+}
+
+// optional bytes height_deltas = 105;
+inline bool FrameDecodedEvents::has_height_deltas() const {
+  return (_has_bits_[0] & 0x00000010u) != 0;
+}
+inline void FrameDecodedEvents::clear_height_deltas() {
+  height_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000010u;
+}
+inline const std::string& FrameDecodedEvents::height_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+  return height_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_height_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000010u;
+  height_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+}
+inline void FrameDecodedEvents::set_height_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000010u;
+  height_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+}
+inline void FrameDecodedEvents::set_height_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000010u;
+  height_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+}
+inline void FrameDecodedEvents::set_height_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000010u;
+  height_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_height_deltas() {
+  _has_bits_[0] |= 0x00000010u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+  return height_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_height_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+  if (!has_height_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000010u;
+  return height_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_height_deltas(std::string* height_deltas) {
+  if (height_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000010u;
+  } else {
+    _has_bits_[0] &= ~0x00000010u;
+  }
+  height_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), height_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.height_deltas)
+}
+
+// optional bytes codec_deltas = 106;
+inline bool FrameDecodedEvents::has_codec_deltas() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void FrameDecodedEvents::clear_codec_deltas() {
+  codec_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline const std::string& FrameDecodedEvents::codec_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+  return codec_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_codec_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000020u;
+  codec_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+}
+inline void FrameDecodedEvents::set_codec_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000020u;
+  codec_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+}
+inline void FrameDecodedEvents::set_codec_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000020u;
+  codec_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+}
+inline void FrameDecodedEvents::set_codec_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000020u;
+  codec_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_codec_deltas() {
+  _has_bits_[0] |= 0x00000020u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+  return codec_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_codec_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+  if (!has_codec_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000020u;
+  return codec_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_codec_deltas(std::string* codec_deltas) {
+  if (codec_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000020u;
+  } else {
+    _has_bits_[0] &= ~0x00000020u;
+  }
+  codec_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), codec_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.codec_deltas)
+}
+
+// optional bytes qp_deltas = 107;
+inline bool FrameDecodedEvents::has_qp_deltas() const {
+  return (_has_bits_[0] & 0x00000040u) != 0;
+}
+inline void FrameDecodedEvents::clear_qp_deltas() {
+  qp_deltas_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+  _has_bits_[0] &= ~0x00000040u;
+}
+inline const std::string& FrameDecodedEvents::qp_deltas() const {
+  // @@protoc_insertion_point(field_get:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+  return qp_deltas_.GetNoArena();
+}
+inline void FrameDecodedEvents::set_qp_deltas(const std::string& value) {
+  _has_bits_[0] |= 0x00000040u;
+  qp_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), value);
+  // @@protoc_insertion_point(field_set:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+}
+inline void FrameDecodedEvents::set_qp_deltas(std::string&& value) {
+  _has_bits_[0] |= 0x00000040u;
+  qp_deltas_.SetNoArena(
+    &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::move(value));
+  // @@protoc_insertion_point(field_set_rvalue:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+}
+inline void FrameDecodedEvents::set_qp_deltas(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  _has_bits_[0] |= 0x00000040u;
+  qp_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), ::std::string(value));
+  // @@protoc_insertion_point(field_set_char:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+}
+inline void FrameDecodedEvents::set_qp_deltas(const void* value, size_t size) {
+  _has_bits_[0] |= 0x00000040u;
+  qp_deltas_.SetNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
+      ::std::string(reinterpret_cast<const char*>(value), size));
+  // @@protoc_insertion_point(field_set_pointer:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+}
+inline std::string* FrameDecodedEvents::mutable_qp_deltas() {
+  _has_bits_[0] |= 0x00000040u;
+  // @@protoc_insertion_point(field_mutable:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+  return qp_deltas_.MutableNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline std::string* FrameDecodedEvents::release_qp_deltas() {
+  // @@protoc_insertion_point(field_release:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+  if (!has_qp_deltas()) {
+    return nullptr;
+  }
+  _has_bits_[0] &= ~0x00000040u;
+  return qp_deltas_.ReleaseNonDefaultNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
+}
+inline void FrameDecodedEvents::set_allocated_qp_deltas(std::string* qp_deltas) {
+  if (qp_deltas != nullptr) {
+    _has_bits_[0] |= 0x00000040u;
+  } else {
+    _has_bits_[0] &= ~0x00000040u;
+  }
+  qp_deltas_.SetAllocatedNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), qp_deltas);
+  // @@protoc_insertion_point(field_set_allocated:webrtc.rtclog2.FrameDecodedEvents.qp_deltas)
+}
+
+// -------------------------------------------------------------------
+
 // BeginLogEvent
 
 // optional int64 timestamp_ms = 1;
@@ -13953,6 +14889,8 @@ inline void RemoteEstimates::set_allocated_link_capacity_upper_kbps_deltas(std::
 
 // -------------------------------------------------------------------
 
+// -------------------------------------------------------------------
+
 
 // @@protoc_insertion_point(namespace_scope)
 
@@ -13961,6 +14899,7 @@ inline void RemoteEstimates::set_allocated_link_capacity_upper_kbps_deltas(std::
 
 PROTOBUF_NAMESPACE_OPEN
 
+template <> struct is_proto_enum< ::webrtc::rtclog2::FrameDecodedEvents_Codec> : ::std::true_type {};
 template <> struct is_proto_enum< ::webrtc::rtclog2::DelayBasedBweUpdates_DetectorState> : ::std::true_type {};
 template <> struct is_proto_enum< ::webrtc::rtclog2::BweProbeResultFailure_FailureReason> : ::std::true_type {};
 template <> struct is_proto_enum< ::webrtc::rtclog2::IceCandidatePairConfig_IceCandidatePairConfigType> : ::std::true_type {};

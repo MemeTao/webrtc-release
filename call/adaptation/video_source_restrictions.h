@@ -11,6 +11,7 @@
 #ifndef CALL_ADAPTATION_VIDEO_SOURCE_RESTRICTIONS_H_
 #define CALL_ADAPTATION_VIDEO_SOURCE_RESTRICTIONS_H_
 
+#include <string>
 #include <utility>
 
 #include "absl/types/optional.h"
@@ -37,6 +38,8 @@ class VideoSourceRestrictions {
   bool operator!=(const VideoSourceRestrictions& rhs) const {
     return !(*this == rhs);
   }
+
+  std::string ToString() const;
 
   // The source must produce a resolution less than or equal to
   // max_pixels_per_frame().
@@ -65,8 +68,18 @@ class VideoSourceRestrictions {
   absl::optional<double> max_frame_rate_;
 };
 
+bool DidRestrictionsIncrease(VideoSourceRestrictions before,
+                             VideoSourceRestrictions after);
+bool DidRestrictionsDecrease(VideoSourceRestrictions before,
+                             VideoSourceRestrictions after);
 bool DidIncreaseResolution(VideoSourceRestrictions restrictions_before,
                            VideoSourceRestrictions restrictions_after);
+bool DidDecreaseResolution(VideoSourceRestrictions restrictions_before,
+                           VideoSourceRestrictions restrictions_after);
+bool DidIncreaseFrameRate(VideoSourceRestrictions restrictions_before,
+                          VideoSourceRestrictions restrictions_after);
+bool DidDecreaseFrameRate(VideoSourceRestrictions restrictions_before,
+                          VideoSourceRestrictions restrictions_after);
 
 }  // namespace webrtc
 

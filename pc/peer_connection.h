@@ -207,15 +207,29 @@ class PeerConnection : public PeerConnectionInternal,
                    const RTCOfferAnswerOptions& options) override;
   void CreateAnswer(CreateSessionDescriptionObserver* observer,
                     const RTCOfferAnswerOptions& options) override;
+
+  void SetLocalDescription(
+      std::unique_ptr<SessionDescriptionInterface> desc,
+      rtc::scoped_refptr<SetLocalDescriptionObserverInterface> observer)
+      override;
+  void SetLocalDescription(
+      rtc::scoped_refptr<SetLocalDescriptionObserverInterface> observer)
+      override;
+  // TODO(https://crbug.com/webrtc/11798): Delete these methods in favor of the
+  // ones taking SetLocalDescriptionObserverInterface as argument.
   void SetLocalDescription(SetSessionDescriptionObserver* observer,
                            SessionDescriptionInterface* desc) override;
   void SetLocalDescription(SetSessionDescriptionObserver* observer) override;
-  void SetRemoteDescription(SetSessionDescriptionObserver* observer,
-                            SessionDescriptionInterface* desc) override;
+
   void SetRemoteDescription(
       std::unique_ptr<SessionDescriptionInterface> desc,
       rtc::scoped_refptr<SetRemoteDescriptionObserverInterface> observer)
       override;
+  // TODO(https://crbug.com/webrtc/11798): Delete this methods in favor of the
+  // ones taking SetRemoteDescriptionObserverInterface as argument.
+  void SetRemoteDescription(SetSessionDescriptionObserver* observer,
+                            SessionDescriptionInterface* desc) override;
+
   PeerConnectionInterface::RTCConfiguration GetConfiguration() override;
   RTCError SetConfiguration(
       const PeerConnectionInterface::RTCConfiguration& configuration) override;
@@ -237,6 +251,8 @@ class PeerConnection : public PeerConnectionInternal,
 
   rtc::scoped_refptr<SctpTransportInterface> GetSctpTransport() const override;
 
+  void AddAdaptationResource(rtc::scoped_refptr<Resource> resource) override;
+
   bool StartRtcEventLog(std::unique_ptr<RtcEventLogOutput> output,
                         int64_t output_period_ms) override;
   bool StartRtcEventLog(std::unique_ptr<RtcEventLogOutput> output) override;
@@ -244,14 +260,15 @@ class PeerConnection : public PeerConnectionInternal,
 
   void Close() override;
 
+  rtc::Thread* signaling_thread() const final {
+    return factory_->signaling_thread();
+  }
+
   // PeerConnectionInternal implementation.
   rtc::Thread* network_thread() const final {
     return factory_->network_thread();
   }
   rtc::Thread* worker_thread() const final { return factory_->worker_thread(); }
-  rtc::Thread* signaling_thread() const final {
-    return factory_->signaling_thread();
-  }
 
   std::string session_id() const override {
     RTC_DCHECK_RUN_ON(signaling_thread());
@@ -270,19 +287,19 @@ class PeerConnection : public PeerConnectionInternal,
     return transceivers_;
   }
 
-  sigslot::signal1<DataChannel*>& SignalDataChannelCreated() override {
-    return data_channel_controller_.SignalDataChannelCreated();
+  sigslot::signal1<RtpDataChannel*>& SignalRtpDataChannelCreated() override {
+    return data_channel_controller_.SignalRtpDataChannelCreated();
+  }
+
+  sigslot::signal1<SctpDataChannel*>& SignalSctpDataChannelCreated() override {
+    return data_channel_controller_.SignalSctpDataChannelCreated();
   }
 
   cricket::RtpDataChannel* rtp_data_channel() const override {
     return data_channel_controller_.rtp_data_channel();
   }
 
-  std::vector<rtc::scoped_refptr<DataChannel>> sctp_data_channels()
-      const override {
-    RTC_DCHECK_RUN_ON(signaling_thread());
-    return *data_channel_controller_.sctp_data_channels();
-  }
+  std::vector<DataChannelStats> GetDataChannelStats() const override;
 
   absl::optional<std::string> sctp_transport_name() const override;
 
@@ -312,7 +329,7 @@ class PeerConnection : public PeerConnectionInternal,
   // Get current SSL role used by SCTP's underlying transport.
   bool GetSctpSslRole(rtc::SSLRole* role);
   // Handler for the "channel closed" signal
-  void OnSctpDataChannelClosed(DataChannel* channel);
+  void OnSctpDataChannelClosed(DataChannelInterface* channel);
 
   // Functions made public for testing.
   void ReturnHistogramVeryQuicklyForTesting() {
@@ -324,15 +341,15 @@ class PeerConnection : public PeerConnectionInternal,
     RTC_DCHECK_RUN_ON(signaling_thread());
     return sctp_mid_s_;
   }
-  std::vector<UsedSocketAddr> used_sockets() const override;
+
  protected:
   ~PeerConnection() override;
 
  private:
   class ImplicitCreateSessionDescriptionObserver;
   friend class ImplicitCreateSessionDescriptionObserver;
-  class SetRemoteDescriptionObserverAdapter;
-  friend class SetRemoteDescriptionObserverAdapter;
+  class SetSessionDescriptionObserverAdapter;
+  friend class SetSessionDescriptionObserverAdapter;
 
   // Represents the [[LocalIceCredentialsToReplace]] internal slot in the spec.
   // It makes the next CreateOffer() produce new ICE credentials even if
@@ -358,57 +375,6 @@ class PeerConnection : public PeerConnectionInternal,
     // An RtpSender can have many SSRCs. The first one is used as a sort of ID
     // for communicating with the lower layers.
     uint32_t first_ssrc;
-  };
-
-  // Field-trial based configuration for datagram transport.
-  struct DatagramTransportConfig {
-    explicit DatagramTransportConfig(const std::string& field_trial)
-        : enabled("enabled", true), default_value("default_value", false) {
-      ParseFieldTrial({&enabled, &default_value}, field_trial);
-    }
-
-    // Whether datagram transport support is enabled at all.  Defaults to true,
-    // allowing datagram transport to be used if (a) the application provides a
-    // factory for it and (b) the configuration specifies its use.  This flag
-    // provides a kill-switch to force-disable datagram transport across all
-    // applications, without code changes.
-    FieldTrialFlag enabled;
-
-    // Whether the datagram transport is enabled or disabled by default.
-    // Defaults to false, meaning that applications must configure use of
-    // datagram transport through RTCConfiguration.  If set to true,
-    // applications will use the datagram transport by default (but may still
-    // explicitly configure themselves not to use it through RTCConfiguration).
-    FieldTrialFlag default_value;
-  };
-
-  // Field-trial based configuration for datagram transport data channels.
-  struct DatagramTransportDataChannelConfig {
-    explicit DatagramTransportDataChannelConfig(const std::string& field_trial)
-        : enabled("enabled", true),
-          default_value("default_value", false),
-          receive_only("receive_only", false) {
-      ParseFieldTrial({&enabled, &default_value, &receive_only}, field_trial);
-    }
-
-    // Whether datagram transport data channel support is enabled at all.
-    // Defaults to true, allowing datagram transport to be used if (a) the
-    // application provides a factory for it and (b) the configuration specifies
-    // its use.  This flag provides a kill-switch to force-disable datagram
-    // transport across all applications, without code changes.
-    FieldTrialFlag enabled;
-
-    // Whether the datagram transport data channels are enabled or disabled by
-    // default. Defaults to false, meaning that applications must configure use
-    // of datagram transport through RTCConfiguration.  If set to true,
-    // applications will use the datagram transport by default (but may still
-    // explicitly configure themselves not to use it through RTCConfiguration).
-    FieldTrialFlag default_value;
-
-    // Whether the datagram transport is enabled in receive-only mode.  If true,
-    // and if the datagram transport is enabled, it will only be used when
-    // receiving incoming calls, not when placing outgoing calls.
-    FieldTrialFlag receive_only;
   };
 
   // Captures partial state to be used for rollback. Applicable only in
@@ -477,7 +443,7 @@ class PeerConnection : public PeerConnectionInternal,
       rtc::scoped_refptr<CreateSessionDescriptionObserver> observer);
   void DoSetLocalDescription(
       std::unique_ptr<SessionDescriptionInterface> desc,
-      rtc::scoped_refptr<SetSessionDescriptionObserver> observer);
+      rtc::scoped_refptr<SetLocalDescriptionObserverInterface> observer);
   void DoSetRemoteDescription(
       std::unique_ptr<SessionDescriptionInterface> desc,
       rtc::scoped_refptr<SetRemoteDescriptionObserverInterface> observer);
@@ -859,10 +825,6 @@ class PeerConnection : public PeerConnectionInternal,
   void FillInMissingRemoteMids(cricket::SessionDescription* remote_description)
       RTC_RUN_ON(signaling_thread());
 
-  // Is there an RtpSender of the given type?
-  bool HasRtpSender(cricket::MediaType type) const
-      RTC_RUN_ON(signaling_thread());
-
   // Return the RtpSender with the given track attached.
   rtc::scoped_refptr<RtpSenderProxyWithInternal<RtpSenderInternal>>
   FindSenderForTrack(MediaStreamTrackInterface* track) const
@@ -888,7 +850,7 @@ class PeerConnection : public PeerConnectionInternal,
 
   // Returns the specified SCTP DataChannel in sctp_data_channels_,
   // or nullptr if not found.
-  DataChannel* FindDataChannelBySid(int sid) const
+  SctpDataChannel* FindDataChannelBySid(int sid) const
       RTC_RUN_ON(signaling_thread());
 
   // Called when first configuring the port allocator.
@@ -1213,25 +1175,6 @@ class PeerConnection : public PeerConnectionInternal,
       kIceGatheringNew;
   PeerConnectionInterface::RTCConfiguration configuration_
       RTC_GUARDED_BY(signaling_thread());
-
-  // Field-trial based configuration for datagram transport.
-  const DatagramTransportConfig datagram_transport_config_;
-
-  // Field-trial based configuration for datagram transport data channels.
-  const DatagramTransportDataChannelConfig
-      datagram_transport_data_channel_config_;
-
-  // Final, resolved value for whether datagram transport is in use.
-  bool use_datagram_transport_ RTC_GUARDED_BY(signaling_thread()) = false;
-
-  // Equivalent of |use_datagram_transport_|, but for its use with data
-  // channels.
-  bool use_datagram_transport_for_data_channels_
-      RTC_GUARDED_BY(signaling_thread()) = false;
-
-  // Resolved value of whether to use data channels only for incoming calls.
-  bool use_datagram_transport_for_data_channels_receive_only_
-      RTC_GUARDED_BY(signaling_thread()) = false;
 
   // TODO(zstein): |async_resolver_factory_| can currently be nullptr if it
   // is not injected. It should be required once chromium supplies it.

@@ -1182,6 +1182,7 @@ class RuntimeSetting :
     kCustomRenderProcessingSettingFieldNumber = 2,
     kCaptureFixedPostGainFieldNumber = 3,
     kPlayoutVolumeChangeFieldNumber = 4,
+    kCaptureOutputUsedFieldNumber = 6,
   };
   // optional .webrtc.audioproc.PlayoutAudioDeviceInfo playout_audio_device_change = 5;
   bool has_playout_audio_device_change() const;
@@ -1215,6 +1216,12 @@ class RuntimeSetting :
   ::PROTOBUF_NAMESPACE_ID::int32 playout_volume_change() const;
   void set_playout_volume_change(::PROTOBUF_NAMESPACE_ID::int32 value);
 
+  // optional bool capture_output_used = 6;
+  bool has_capture_output_used() const;
+  void clear_capture_output_used();
+  bool capture_output_used() const;
+  void set_capture_output_used(bool value);
+
   // @@protoc_insertion_point(class_scope:webrtc.audioproc.RuntimeSetting)
  private:
   class _Internal;
@@ -1227,6 +1234,7 @@ class RuntimeSetting :
   float custom_render_processing_setting_;
   float capture_fixed_post_gain_;
   ::PROTOBUF_NAMESPACE_ID::int32 playout_volume_change_;
+  bool capture_output_used_;
   friend struct ::TableStruct_debug_2eproto;
 };
 // -------------------------------------------------------------------
@@ -2625,6 +2633,24 @@ inline void RuntimeSetting::set_allocated_playout_audio_device_change(::webrtc::
   }
   playout_audio_device_change_ = playout_audio_device_change;
   // @@protoc_insertion_point(field_set_allocated:webrtc.audioproc.RuntimeSetting.playout_audio_device_change)
+}
+
+// optional bool capture_output_used = 6;
+inline bool RuntimeSetting::has_capture_output_used() const {
+  return (_has_bits_[0] & 0x00000020u) != 0;
+}
+inline void RuntimeSetting::clear_capture_output_used() {
+  capture_output_used_ = false;
+  _has_bits_[0] &= ~0x00000020u;
+}
+inline bool RuntimeSetting::capture_output_used() const {
+  // @@protoc_insertion_point(field_get:webrtc.audioproc.RuntimeSetting.capture_output_used)
+  return capture_output_used_;
+}
+inline void RuntimeSetting::set_capture_output_used(bool value) {
+  _has_bits_[0] |= 0x00000020u;
+  capture_output_used_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.audioproc.RuntimeSetting.capture_output_used)
 }
 
 // -------------------------------------------------------------------

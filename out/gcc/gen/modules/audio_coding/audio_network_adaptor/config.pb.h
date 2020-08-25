@@ -45,7 +45,7 @@ struct TableStruct_config_2eproto {
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::AuxillaryParseTableField aux[]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
-  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[11]
+  static const ::PROTOBUF_NAMESPACE_ID::internal::ParseTable schema[12]
     PROTOBUF_SECTION_VARIABLE(protodesc_cold);
   static const ::PROTOBUF_NAMESPACE_ID::internal::FieldMetadata field_metadata[];
   static const ::PROTOBUF_NAMESPACE_ID::internal::SerializationTable serialization_table[];
@@ -87,6 +87,9 @@ extern FecController_ThresholdDefaultTypeInternal _FecController_Threshold_defau
 class FrameLengthController;
 class FrameLengthControllerDefaultTypeInternal;
 extern FrameLengthControllerDefaultTypeInternal _FrameLengthController_default_instance_;
+class FrameLengthControllerV2;
+class FrameLengthControllerV2DefaultTypeInternal;
+extern FrameLengthControllerV2DefaultTypeInternal _FrameLengthControllerV2_default_instance_;
 }  // namespace config
 }  // namespace audio_network_adaptor
 }  // namespace webrtc
@@ -102,6 +105,7 @@ template<> ::webrtc::audio_network_adaptor::config::FecControllerRplrBased* Aren
 template<> ::webrtc::audio_network_adaptor::config::FecControllerRplrBased_Threshold* Arena::CreateMaybeMessage<::webrtc::audio_network_adaptor::config::FecControllerRplrBased_Threshold>(Arena*);
 template<> ::webrtc::audio_network_adaptor::config::FecController_Threshold* Arena::CreateMaybeMessage<::webrtc::audio_network_adaptor::config::FecController_Threshold>(Arena*);
 template<> ::webrtc::audio_network_adaptor::config::FrameLengthController* Arena::CreateMaybeMessage<::webrtc::audio_network_adaptor::config::FrameLengthController>(Arena*);
+template<> ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* Arena::CreateMaybeMessage<::webrtc::audio_network_adaptor::config::FrameLengthControllerV2>(Arena*);
 PROTOBUF_NAMESPACE_CLOSE
 namespace webrtc {
 namespace audio_network_adaptor {
@@ -896,6 +900,137 @@ class FrameLengthController :
 };
 // -------------------------------------------------------------------
 
+class FrameLengthControllerV2 :
+    public ::PROTOBUF_NAMESPACE_ID::MessageLite /* @@protoc_insertion_point(class_definition:webrtc.audio_network_adaptor.config.FrameLengthControllerV2) */ {
+ public:
+  FrameLengthControllerV2();
+  virtual ~FrameLengthControllerV2();
+
+  FrameLengthControllerV2(const FrameLengthControllerV2& from);
+  FrameLengthControllerV2(FrameLengthControllerV2&& from) noexcept
+    : FrameLengthControllerV2() {
+    *this = ::std::move(from);
+  }
+
+  inline FrameLengthControllerV2& operator=(const FrameLengthControllerV2& from) {
+    CopyFrom(from);
+    return *this;
+  }
+  inline FrameLengthControllerV2& operator=(FrameLengthControllerV2&& from) noexcept {
+    if (GetArenaNoVirtual() == from.GetArenaNoVirtual()) {
+      if (this != &from) InternalSwap(&from);
+    } else {
+      CopyFrom(from);
+    }
+    return *this;
+  }
+
+  inline const std::string& unknown_fields() const {
+    return _internal_metadata_.unknown_fields();
+  }
+  inline std::string* mutable_unknown_fields() {
+    return _internal_metadata_.mutable_unknown_fields();
+  }
+
+  static const FrameLengthControllerV2& default_instance();
+
+  static void InitAsDefaultInstance();  // FOR INTERNAL USE ONLY
+  static inline const FrameLengthControllerV2* internal_default_instance() {
+    return reinterpret_cast<const FrameLengthControllerV2*>(
+               &_FrameLengthControllerV2_default_instance_);
+  }
+  static constexpr int kIndexInFileMessages =
+    5;
+
+  friend void swap(FrameLengthControllerV2& a, FrameLengthControllerV2& b) {
+    a.Swap(&b);
+  }
+  inline void Swap(FrameLengthControllerV2* other) {
+    if (other == this) return;
+    InternalSwap(other);
+  }
+
+  // implements Message ----------------------------------------------
+
+  inline FrameLengthControllerV2* New() const final {
+    return CreateMaybeMessage<FrameLengthControllerV2>(nullptr);
+  }
+
+  FrameLengthControllerV2* New(::PROTOBUF_NAMESPACE_ID::Arena* arena) const final {
+    return CreateMaybeMessage<FrameLengthControllerV2>(arena);
+  }
+  void CheckTypeAndMergeFrom(const ::PROTOBUF_NAMESPACE_ID::MessageLite& from)
+    final;
+  void CopyFrom(const FrameLengthControllerV2& from);
+  void MergeFrom(const FrameLengthControllerV2& from);
+  PROTOBUF_ATTRIBUTE_REINITIALIZES void Clear() final;
+  bool IsInitialized() const final;
+
+  size_t ByteSizeLong() const final;
+  #if GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  const char* _InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::internal::ParseContext* ctx) final;
+  #else
+  bool MergePartialFromCodedStream(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedInputStream* input) final;
+  #endif  // GOOGLE_PROTOBUF_ENABLE_EXPERIMENTAL_PARSER
+  void SerializeWithCachedSizes(
+      ::PROTOBUF_NAMESPACE_ID::io::CodedOutputStream* output) const final;
+  void DiscardUnknownFields();
+  int GetCachedSize() const final { return _cached_size_.Get(); }
+
+  private:
+  inline void SharedCtor();
+  inline void SharedDtor();
+  void SetCachedSize(int size) const;
+  void InternalSwap(FrameLengthControllerV2* other);
+  friend class ::PROTOBUF_NAMESPACE_ID::internal::AnyMetadata;
+  static ::PROTOBUF_NAMESPACE_ID::StringPiece FullMessageName() {
+    return "webrtc.audio_network_adaptor.config.FrameLengthControllerV2";
+  }
+  private:
+  inline ::PROTOBUF_NAMESPACE_ID::Arena* GetArenaNoVirtual() const {
+    return nullptr;
+  }
+  inline void* MaybeArenaPtr() const {
+    return nullptr;
+  }
+  public:
+
+  std::string GetTypeName() const final;
+
+  // nested types ----------------------------------------------------
+
+  // accessors -------------------------------------------------------
+
+  enum : int {
+    kMinPayloadBitrateBpsFieldNumber = 1,
+    kUseSlowAdaptationFieldNumber = 2,
+  };
+  // optional int32 min_payload_bitrate_bps = 1;
+  bool has_min_payload_bitrate_bps() const;
+  void clear_min_payload_bitrate_bps();
+  ::PROTOBUF_NAMESPACE_ID::int32 min_payload_bitrate_bps() const;
+  void set_min_payload_bitrate_bps(::PROTOBUF_NAMESPACE_ID::int32 value);
+
+  // optional bool use_slow_adaptation = 2;
+  bool has_use_slow_adaptation() const;
+  void clear_use_slow_adaptation();
+  bool use_slow_adaptation() const;
+  void set_use_slow_adaptation(bool value);
+
+  // @@protoc_insertion_point(class_scope:webrtc.audio_network_adaptor.config.FrameLengthControllerV2)
+ private:
+  class _Internal;
+
+  ::PROTOBUF_NAMESPACE_ID::internal::InternalMetadataWithArenaLite _internal_metadata_;
+  ::PROTOBUF_NAMESPACE_ID::internal::HasBits<1> _has_bits_;
+  mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
+  ::PROTOBUF_NAMESPACE_ID::int32 min_payload_bitrate_bps_;
+  bool use_slow_adaptation_;
+  friend struct ::TableStruct_config_2eproto;
+};
+// -------------------------------------------------------------------
+
 class ChannelController :
     public ::PROTOBUF_NAMESPACE_ID::MessageLite /* @@protoc_insertion_point(class_definition:webrtc.audio_network_adaptor.config.ChannelController) */ {
  public:
@@ -936,7 +1071,7 @@ class ChannelController :
                &_ChannelController_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    5;
+    6;
 
   friend void swap(ChannelController& a, ChannelController& b) {
     a.Swap(&b);
@@ -1067,7 +1202,7 @@ class DtxController :
                &_DtxController_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    6;
+    7;
 
   friend void swap(DtxController& a, DtxController& b) {
     a.Swap(&b);
@@ -1198,7 +1333,7 @@ class BitrateController :
                &_BitrateController_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    7;
+    8;
 
   friend void swap(BitrateController& a, BitrateController& b) {
     a.Swap(&b);
@@ -1329,7 +1464,7 @@ class Controller_ScoringPoint :
                &_Controller_ScoringPoint_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    8;
+    9;
 
   friend void swap(Controller_ScoringPoint& a, Controller_ScoringPoint& b) {
     a.Swap(&b);
@@ -1461,6 +1596,7 @@ class Controller :
     kDtxController = 24,
     kBitrateController = 25,
     kFecControllerRplrBased = 26,
+    kFrameLengthControllerV2 = 27,
     CONTROLLER_NOT_SET = 0,
   };
 
@@ -1470,7 +1606,7 @@ class Controller :
                &_Controller_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    9;
+    10;
 
   friend void swap(Controller& a, Controller& b) {
     a.Swap(&b);
@@ -1542,6 +1678,7 @@ class Controller :
     kDtxControllerFieldNumber = 24,
     kBitrateControllerFieldNumber = 25,
     kFecControllerRplrBasedFieldNumber = 26,
+    kFrameLengthControllerV2FieldNumber = 27,
   };
   // optional .webrtc.audio_network_adaptor.config.Controller.ScoringPoint scoring_point = 1;
   bool has_scoring_point() const;
@@ -1599,6 +1736,14 @@ class Controller :
   ::webrtc::audio_network_adaptor::config::FecControllerRplrBased* mutable_fec_controller_rplr_based();
   void set_allocated_fec_controller_rplr_based(::webrtc::audio_network_adaptor::config::FecControllerRplrBased* fec_controller_rplr_based);
 
+  // optional .webrtc.audio_network_adaptor.config.FrameLengthControllerV2 frame_length_controller_v2 = 27;
+  bool has_frame_length_controller_v2() const;
+  void clear_frame_length_controller_v2();
+  const ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2& frame_length_controller_v2() const;
+  ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* release_frame_length_controller_v2();
+  ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* mutable_frame_length_controller_v2();
+  void set_allocated_frame_length_controller_v2(::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* frame_length_controller_v2);
+
   void clear_controller();
   ControllerCase controller_case() const;
   // @@protoc_insertion_point(class_scope:webrtc.audio_network_adaptor.config.Controller)
@@ -1610,6 +1755,7 @@ class Controller :
   void set_has_dtx_controller();
   void set_has_bitrate_controller();
   void set_has_fec_controller_rplr_based();
+  void set_has_frame_length_controller_v2();
 
   inline bool has_controller() const;
   inline void clear_has_controller();
@@ -1626,6 +1772,7 @@ class Controller :
     ::webrtc::audio_network_adaptor::config::DtxController* dtx_controller_;
     ::webrtc::audio_network_adaptor::config::BitrateController* bitrate_controller_;
     ::webrtc::audio_network_adaptor::config::FecControllerRplrBased* fec_controller_rplr_based_;
+    ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* frame_length_controller_v2_;
   } controller_;
   ::PROTOBUF_NAMESPACE_ID::uint32 _oneof_case_[1];
 
@@ -1673,7 +1820,7 @@ class ControllerManager :
                &_ControllerManager_default_instance_);
   }
   static constexpr int kIndexInFileMessages =
-    10;
+    11;
 
   friend void swap(ControllerManager& a, ControllerManager& b) {
     a.Swap(&b);
@@ -2378,6 +2525,46 @@ inline void FrameLengthController::set_fl_60ms_to_40ms_bandwidth_bps(::PROTOBUF_
 
 // -------------------------------------------------------------------
 
+// FrameLengthControllerV2
+
+// optional int32 min_payload_bitrate_bps = 1;
+inline bool FrameLengthControllerV2::has_min_payload_bitrate_bps() const {
+  return (_has_bits_[0] & 0x00000001u) != 0;
+}
+inline void FrameLengthControllerV2::clear_min_payload_bitrate_bps() {
+  min_payload_bitrate_bps_ = 0;
+  _has_bits_[0] &= ~0x00000001u;
+}
+inline ::PROTOBUF_NAMESPACE_ID::int32 FrameLengthControllerV2::min_payload_bitrate_bps() const {
+  // @@protoc_insertion_point(field_get:webrtc.audio_network_adaptor.config.FrameLengthControllerV2.min_payload_bitrate_bps)
+  return min_payload_bitrate_bps_;
+}
+inline void FrameLengthControllerV2::set_min_payload_bitrate_bps(::PROTOBUF_NAMESPACE_ID::int32 value) {
+  _has_bits_[0] |= 0x00000001u;
+  min_payload_bitrate_bps_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.audio_network_adaptor.config.FrameLengthControllerV2.min_payload_bitrate_bps)
+}
+
+// optional bool use_slow_adaptation = 2;
+inline bool FrameLengthControllerV2::has_use_slow_adaptation() const {
+  return (_has_bits_[0] & 0x00000002u) != 0;
+}
+inline void FrameLengthControllerV2::clear_use_slow_adaptation() {
+  use_slow_adaptation_ = false;
+  _has_bits_[0] &= ~0x00000002u;
+}
+inline bool FrameLengthControllerV2::use_slow_adaptation() const {
+  // @@protoc_insertion_point(field_get:webrtc.audio_network_adaptor.config.FrameLengthControllerV2.use_slow_adaptation)
+  return use_slow_adaptation_;
+}
+inline void FrameLengthControllerV2::set_use_slow_adaptation(bool value) {
+  _has_bits_[0] |= 0x00000002u;
+  use_slow_adaptation_ = value;
+  // @@protoc_insertion_point(field_set:webrtc.audio_network_adaptor.config.FrameLengthControllerV2.use_slow_adaptation)
+}
+
+// -------------------------------------------------------------------
+
 // ChannelController
 
 // optional int32 channel_1_to_2_bandwidth_bps = 1;
@@ -2835,6 +3022,47 @@ inline ::webrtc::audio_network_adaptor::config::FecControllerRplrBased* Controll
   return controller_.fec_controller_rplr_based_;
 }
 
+// optional .webrtc.audio_network_adaptor.config.FrameLengthControllerV2 frame_length_controller_v2 = 27;
+inline bool Controller::has_frame_length_controller_v2() const {
+  return controller_case() == kFrameLengthControllerV2;
+}
+inline void Controller::set_has_frame_length_controller_v2() {
+  _oneof_case_[0] = kFrameLengthControllerV2;
+}
+inline void Controller::clear_frame_length_controller_v2() {
+  if (has_frame_length_controller_v2()) {
+    delete controller_.frame_length_controller_v2_;
+    clear_has_controller();
+  }
+}
+inline ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* Controller::release_frame_length_controller_v2() {
+  // @@protoc_insertion_point(field_release:webrtc.audio_network_adaptor.config.Controller.frame_length_controller_v2)
+  if (has_frame_length_controller_v2()) {
+    clear_has_controller();
+      ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* temp = controller_.frame_length_controller_v2_;
+    controller_.frame_length_controller_v2_ = nullptr;
+    return temp;
+  } else {
+    return nullptr;
+  }
+}
+inline const ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2& Controller::frame_length_controller_v2() const {
+  // @@protoc_insertion_point(field_get:webrtc.audio_network_adaptor.config.Controller.frame_length_controller_v2)
+  return has_frame_length_controller_v2()
+      ? *controller_.frame_length_controller_v2_
+      : *reinterpret_cast< ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2*>(&::webrtc::audio_network_adaptor::config::_FrameLengthControllerV2_default_instance_);
+}
+inline ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2* Controller::mutable_frame_length_controller_v2() {
+  if (!has_frame_length_controller_v2()) {
+    clear_controller();
+    set_has_frame_length_controller_v2();
+    controller_.frame_length_controller_v2_ = CreateMaybeMessage< ::webrtc::audio_network_adaptor::config::FrameLengthControllerV2 >(
+        GetArenaNoVirtual());
+  }
+  // @@protoc_insertion_point(field_mutable:webrtc.audio_network_adaptor.config.Controller.frame_length_controller_v2)
+  return controller_.frame_length_controller_v2_;
+}
+
 inline bool Controller::has_controller() const {
   return controller_case() != CONTROLLER_NOT_SET;
 }
@@ -2917,6 +3145,8 @@ inline void ControllerManager::set_min_reordering_squared_distance(float value) 
 #ifdef __GNUC__
   #pragma GCC diagnostic pop
 #endif  // __GNUC__
+// -------------------------------------------------------------------
+
 // -------------------------------------------------------------------
 
 // -------------------------------------------------------------------
